@@ -19,6 +19,7 @@ def loadCrimes():
 	with open("datasets/Crimes_-_2001_to_present.csv") as input:
 		reader = csv.reader(input, delimiter=',')
 		i = 0
+		next(reader)	# we skip the header row
 		for row in reader:
 			crime = CrimeRecord(row[0], row[2], row[4], row[7], row[9], row[17], row[19], row[20])
 			if (i < 100):
