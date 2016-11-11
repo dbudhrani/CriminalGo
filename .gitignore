@@ -1,3 +1,5 @@
 /[Dd]atasets/
 
 .DS_Store
+
+*.pyc
