@@ -9,7 +9,6 @@ from models import CrimeCluster
 from logic import BuildCrimeAreas
 
 def main():
-	#loadCrimes()
 	mr_job = BuildCrimeAreas(args=['datasets/Crimes_-_2001_to_present.csv'])
 	with mr_job.make_runner() as runner:
 		runner.run()

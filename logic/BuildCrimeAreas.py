@@ -1,4 +1,4 @@
-
+import csv
 
 from mrjob.job import MRJob
 from mrjob.step import MRStep
@@ -14,17 +14,12 @@ class BuildCrimeAreas(MRJob):
 		self.buildCrimeDegreeDictionary()
 
 	def mapper1(self, _, line):
-		#print "line = " + line
-		fields = line.split(',')
-		if ((line.count(',') == 22 and line.count('(') > 0) or (line.count(',') == 21 and line.count('(') == 0)):
-			degree = self.cdd[fields[5]]
-			district = unicode(fields[12], 'utf-8')
-			if district.isnumeric():
-				yield int(district), degree
-		else:
-			print "Incorrect row. Commas = " + str(line.count(',')) + "; Parentheses = " + str(line.count('('))
-			print(line)
-			yield "error", 1
+		for fields in csv.reader([line]):
+			if fields[12]:
+				degree = self.cdd[fields[5]]
+				district = int(fields[12])
+				yield district, degree
+
 
 	def reducer1(self, key, values):
 		lst = list(values)
