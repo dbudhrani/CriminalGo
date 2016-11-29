@@ -8,15 +8,24 @@ from models import CrimeRecord
 from models import CrimeCluster
 from logic import BuildCrimeAreas
 from logic import PointInPolygon
+from logic import PokemonPredictor
 import numpy as np
 
 def main():
+
+	pokepredictor = PokemonPredictor()
+	pokepredictor.predictPokemonAppearances()
+
+'''
 	mr_job = BuildCrimeAreas(args=['datasets/Crimes_-_2001_to_present.csv'])
 	with mr_job.make_runner() as runner:
 		runner.run()
 		for line in runner.stream_output():
 			key, value = mr_job.parse_output_line(line)
 			print "key = " + str(key) + "; value = " + str(value)
+'''
+
+
 '''
 	pip = PointInPolygon()
 	commAreas = open(os.path.join(os.path.dirname(__file__), 'datasets/CommAreas.csv'))
