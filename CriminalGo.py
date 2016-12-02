@@ -1,5 +1,6 @@
 import csv
 import os
+import time
 
 from mrjob.runner import MRJobRunner
 
@@ -9,11 +10,12 @@ from models import CrimeCluster
 from logic import BuildCrimeAreas
 from logic import PointInPolygon
 from logic import PokemonPredictor
+from logic import PokemonPredictor2
 import numpy as np
 
 def main():
 
-	pokepredictor = PokemonPredictor()
+	pokepredictor = PokemonPredictor2()
 	pokepredictor.predictPokemonAppearances()
 
 '''
@@ -67,4 +69,6 @@ def loadCrimes():
 			i = i + 1
 
 if __name__ == "__main__":
+	start_time = time.time()
 	main()
+	print("--- %s seconds ---" % (time.time() - start_time))

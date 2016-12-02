@@ -1,13 +1,11 @@
 from sklearn import svm
 import csv
-import time
 import os
 import math
 
 class PokemonPredictor():
 
 	def predictPokemonAppearances(self):
-		start_time = time.time()
 		print "Starting Pokemon prediction..."
 		self.buildNumericDictionary()
 		matrix = []
@@ -101,7 +99,6 @@ class PokemonPredictor():
 		accuracy *= 100
 		print "Accuracy = " + str(accuracy) + "%"
 
-		print("--- %s seconds ---" % (time.time() - start_time))
 
 	def buildNumericDictionary(self):
 		self.cdd = {}

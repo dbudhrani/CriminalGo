@@ -37,55 +37,12 @@ class BuildCrimeAreas(MRJob):
 		#print "mapper - commAreas = " + str(self.commAreas)
 		#print "mapper - commReader = " + str(self.commReader)
 		for fields in csv.reader([line]):
-			#if fields[13]:
-			#	degree = self.cdd[fields[5]]
-			#	#community = int(fields[14])
-			#	#yield district, degree
-			#	if fields[13] == "01A":
-			#		print line
+			if fields[19] and fields[20]:
+				yield "(" + str(round(float(fields[19]), 2)) + ", " + str(round(float(fields[20]), 2)) + ")", 1
+			#elif fields[13]:
 			#	yield "Community area " + fields[13], 1
-			#elif fields[19] and fields[20]:
-			#	yield -2, 1
-
-			#if not fields[19] and not fields[20]:
-			#	yield fields[5], 1
-
-			if fields[13]:
-				yield "Community area " + fields[13], 1
-			elif fields[19] and fields[20]:
-				isFound = False
-				if not self.dataLoaded:
-					self.data = list(self.commReader)
-					self.dataLoaded = True
-				row_count = len(self.data)
-				#print "row_count = " + str(row_count)
-				for communities in self.data:
-					a = np.matrix(communities[0])
-					#print "communities[0] = " + str(communities[0])
-					#print(a)
-					#print "str " + fields[19]
-					isInside = self.pip.checkInside(fields[19], fields[20], a)
-					if isInside:
-						isFound = True
-					#	print "Point inside"
-						yield "Community area-loc " + communities[5], 1
-						break
-					else:
-						if fields[19] == "41.740918989" and fields[20] == "-87.631967753":
-							print "chtaam not found"
-						#break
-					#else:
-						#print "Point not inside"
-				if not isFound:
-					yield -3, 1
-			else:
-				yield -2, 1
-
-			#elif fields[11]:
-			#	yield "District " + fields[11], 1
 			#else:
-			#	yield -1, 1
-
+			#	yield -2, 1
 
 	def reducer1(self, key, values):
 #		lst = list(values)
