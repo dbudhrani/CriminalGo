@@ -4,8 +4,16 @@ import os
 import math
 import time
 from sets import Set
+from sklearn.feature_extraction import FeatureHasher
+from sklearn.ensemble import RandomForestClassifier
+from scipy import *
+from scipy.sparse import *
 
 class PokemonPredictor2():
+
+	def getL2(self, matrix):
+		for elem in matrix:
+			return str(elem)
 
 	def predictPokemonAppearances(self):
 		start_time = time.time()
@@ -17,9 +25,9 @@ class PokemonPredictor2():
 			reader = csv.reader(input, delimiter=',')
 			next(reader)
 			for row in reader:
-				if True or (float(row[1]) < 42.024254 and float(row[1]) > 41.6177356) and (float(row[2]) > -87.9520771 and float(row[2]) < -87.5266041):
-					cluster = "cluster-(" + str(float(row[1])) + ", " + str(float(row[2])) + ")"
-					features.add(cluster)
+				if (float(row[1]) < 42.024254 and float(row[1]) > 41.6177356) and (float(row[2]) > -87.9520771 and float(row[2]) < -87.5266041):
+					#cluster = "cluster-(" + str(round(float(row[1]), 2)) + ", " + str(round(float(row[2]), 2)) + ")"
+					#features.add(cluster)
 
 					appearedHour = row[13]
 					features.add("hour-" + appearedHour)
@@ -54,16 +62,16 @@ class PokemonPredictor2():
 			input.seek(0)
 			next(reader)
 			for row in reader:
-				if True or (float(row[1]) < 42.024254 and float(row[1]) > 41.6177356) and (float(row[2]) > -87.9520771 and float(row[2]) < -87.5266041):
+				if (float(row[1]) < 42.024254 and float(row[1]) > 41.6177356) and (float(row[2]) > -87.9520771 and float(row[2]) < -87.5266041):
 					matrixRow = []
 
 					for f in lst:
 						value = -1
-						if f.startswith("cluster-"):
-							if f == "cluster-(" + str(float(row[1])) + ", " + str(float(row[2])) + ")":
-								value = 1
-							else:
-								value = 0
+						#if f.startswith("cluster-"):
+						#	if f == "cluster-(" + str(round(float(row[1]), 2)) + ", " + str(round(float(row[2]), 2)) + ")":
+						#		value = 1
+						#	else:
+						#		value = 0
 
 						if f.startswith("hour-"):
 							if f == "hour-" + row[13]:
@@ -141,6 +149,7 @@ class PokemonPredictor2():
 		print "Length of prediction results = " + str(len(prediction))
 		print "Prediction = " + str(prediction)
 
+		print "Computing prediction accuracy..."
 		# we compare our prediction to the real results and compute the accuracy of the algorithm
 		pokemonId_res_check = pokemonId_res[-testRowsNumber:]
 		i = 0
@@ -153,3 +162,29 @@ class PokemonPredictor2():
 		accuracy /= float(testRowsNumber)
 		accuracy *= 100
 		print "Accuracy = " + str(accuracy) + "%"
+
+'''
+		hasher = FeatureHasher(n_features=100, input_type='string')
+		rf = RandomForestClassifier(n_estimators=50)
+		newMatrix = hasher.transform(self.getL2(d) for d in matrix)
+		D = csr_matrix(newMatrix).todense()
+
+		numRows = len(D)
+		print "D rows = " + str(len(D))
+		print "D cols = " + str(D[0].size)
+
+		trainingRowsNumber = int(math.floor(numRows * 0.9))
+		targetRowsNumber = trainingRowsNumber
+		testRowsNumber = int(numRows - trainingRowsNumber)
+		trainingRows = D[:trainingRowsNumber]
+		testRows = D[-testRowsNumber:]
+		targetRows = pokemonId_res[:trainingRowsNumber]
+
+		print "Training..."
+		rf.fit(trainingRows, targetRows)
+
+		print "Predicting..."
+		prediction = rf.predict(testRows)
+		print "Prediction = " + str(prediction)
+'''
+
