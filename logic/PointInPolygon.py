@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from matplotlib.path import Path
 from decimal import Decimal
 

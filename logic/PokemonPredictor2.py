@@ -8,6 +8,7 @@ from sklearn.feature_extraction import FeatureHasher
 from sklearn.ensemble import RandomForestClassifier
 from scipy import *
 from scipy.sparse import *
+from sklearn import preprocessing
 
 class PokemonPredictor2():
 
@@ -21,11 +22,13 @@ class PokemonPredictor2():
 		matrix = []
 		pokemonId_res = []
 		features = Set()
+		le = preprocessing.LabelEncoder()
+		fw = open(os.path.join(os.path.dirname(__file__), '../matrix.txt'), 'w')
 		with open(os.path.join(os.path.dirname(__file__), '../datasets/300k.csv'), 'r') as input:
 			reader = csv.reader(input, delimiter=',')
 			next(reader)
 			for row in reader:
-				if (float(row[1]) < 42.024254 and float(row[1]) > 41.6177356) and (float(row[2]) > -87.9520771 and float(row[2]) < -87.5266041):
+				if (not row[15] == "dummy_day") and (float(row[1]) < 42.024254 and float(row[1]) > 41.6177356) and (float(row[2]) > -87.9520771 and float(row[2]) < -87.5266041):
 					#cluster = "cluster-(" + str(round(float(row[1]), 2)) + ", " + str(round(float(row[2]), 2)) + ")"
 					#features.add(cluster)
 
@@ -41,28 +44,29 @@ class PokemonPredictor2():
 					closeToWater = row[20]
 					features.add("ctw-" + closeToWater)
 
-					temperature = row[24]
-					features.add("temp-" + temperature)
+					#temperature = row[24]
+					#features.add("temp-" + temperature)
 
-					windSpeed = row[25]
-					features.add("ws-" + windSpeed)
+					#windSpeed = row[25]
+					#features.add("ws-" + windSpeed)
 
 					weatherIcon = row[28]
 					features.add("wi-" + weatherIcon)
 
-					population_density = row[37]
-					features.add("pd-" + population_density)
+					#population_density = row[37]
+					#features.add("pd-" + population_density)
 
-					gymDistanceKm = row[42]
-					features.add("gd-" + gymDistanceKm)
+					#gymDistanceKm = row[42]
+					#features.add("gd-" + gymDistanceKm)
 
 			lst = list(features)
 			print "Number of features = " + str(len(lst))
+			fw.write(str(lst) + "\n")
 
 			input.seek(0)
 			next(reader)
 			for row in reader:
-				if (float(row[1]) < 42.024254 and float(row[1]) > 41.6177356) and (float(row[2]) > -87.9520771 and float(row[2]) < -87.5266041):
+				if (not row[15] == "dummy_day") and (float(row[1]) < 42.024254 and float(row[1]) > 41.6177356) and (float(row[2]) > -87.9520771 and float(row[2]) < -87.5266041):
 					matrixRow = []
 
 					for f in lst:
@@ -78,7 +82,7 @@ class PokemonPredictor2():
 								value = 1
 							else:
 								value = 0
-						if f.startswith("weekday-"):
+						if f.startswith("weekday-") and not f == "weekday-dummy_day":
 							if f == "weekday-" + row[15]:
 								value = 1
 							else:
@@ -93,36 +97,37 @@ class PokemonPredictor2():
 								value = 1
 							else:
 								value = 0
-						if f.startswith("temp-"):
-							if f == "temp-" + row[24]:
-								value = 1
-							else:
-								value = 0
-						if f.startswith("ws-"):
-							if f == "ws-" + row[25]:
-								value = 1
-							else:
-								value = 0
+						#if f.startswith("temp-"):
+						#	if f == "temp-" + row[24]:
+						#		value = 1
+						#	else:
+						#		value = 0
+						#if f.startswith("ws-"):
+						#	if f == "ws-" + row[25]:
+						#		value = 1
+						#	else:
+						#		value = 0
 						if f.startswith("wi-"):
 							if f == "wi-" + row[28]:
 								value = 1
 							else:
 								value = 0
-						if f.startswith("pd-"):
-							if f == "pd-" + row[37]:
-								value = 1
-							else:
-								value = 0
-						if f.startswith("gd-"):
-							if f == "gd-" + row[42]:
-								value = 1
-							else:
-								value = 0
+						#if f.startswith("pd-"):
+						#	if f == "pd-" + row[37]:
+						#		value = 1
+						#	else:
+						#		value = 0
+						#if f.startswith("gd-"):
+						#	if f == "gd-" + row[42]:
+						#		value = 1
+						#	else:
+						#		value = 0
 
 						matrixRow.append(value)
 					matrix.append(matrixRow)
+					fw.write(str(matrixRow) + "\n")
 					pokemonId_res.append(row[0])
-
+		fw.close()
 		numRows = len(matrix)
 		numResults = len(pokemonId_res)
 

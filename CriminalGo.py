@@ -11,21 +11,33 @@ from logic import BuildCrimeAreas
 from logic import PointInPolygon
 from logic import PokemonPredictor
 from logic import PokemonPredictor2
+from logic import BuildClustersMap
 import numpy as np
 
 def main():
 
-	pokepredictor = PokemonPredictor2()
-	pokepredictor.predictPokemonAppearances()
-
-'''
 	mr_job = BuildCrimeAreas(args=['datasets/Crimes_-_2001_to_present.csv'])
+	crimes = {}
 	with mr_job.make_runner() as runner:
 		runner.run()
 		for line in runner.stream_output():
 			key, value = mr_job.parse_output_line(line)
-			print "key = " + str(key) + "; value = " + str(value)
-'''
+			crimes[key] = value
+		#	print "key = " + str(key) + "; value = " + str(value)
+
+	#pokepredictor = PokemonPredictor()
+	#pcd = pokepredictor.predictPokemonAppearances()
+
+	#runner = mr_job.make_runner()
+	#runner.run()
+
+
+
+	m = BuildClustersMap()
+	m.buildMap(crimes, None)
+
+
+
 
 
 '''
