@@ -16,6 +16,7 @@ class PokemonPredictor():
 		self.pcd = {}
 		matrix = []
 		pokemonId_res = []
+		fw = open(os.path.join(os.path.dirname(__file__), '../datasets/prediction.csv'), 'w')
 		with open(os.path.join(os.path.dirname(__file__), '../datasets/300k.csv'), 'r') as input:
 			reader = csv.reader(input, delimiter=',')
 			next(reader)
@@ -66,7 +67,7 @@ class PokemonPredictor():
 					matrix.append(matrixRow)
 
 					pokemonId = row[0]
-					pokemonId_res.append(self.prd[pokemonId])
+					pokemonId_res.append(pokemonId)
 		
 		numRows = len(matrix)
 		numResults = len(pokemonId_res)
@@ -103,6 +104,7 @@ class PokemonPredictor():
 		accuracy = 0
 		while i < testRowsNumber:
 			self.addPokemonCluster(matrix[trainingRowsNumber+i][0], matrix[trainingRowsNumber+i][1], prediction[i], 2)
+			fw.write(str(pokemonId_res_check[i]) + ";" + str(matrix[trainingRowsNumber+i][0]) + ";" + str(matrix[trainingRowsNumber+i][1]) + "\n")
 			if pokemonId_res_check[i] == prediction[i]:
 				accuracy += 1
 			i += 1
@@ -113,6 +115,10 @@ class PokemonPredictor():
 
 		#for k in self.pcd.keys():
 		#	print "key = " + k + "; value = " + str(self.pcd[k])
+
+
+
+		fw.close()
 		return self.pcd
 
 

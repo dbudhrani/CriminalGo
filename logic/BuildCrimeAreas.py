@@ -38,7 +38,7 @@ class BuildCrimeAreas(MRJob):
 		#print "mapper - commReader = " + str(self.commReader)
 		for fields in csv.reader([line]):
 			if fields[19] and fields[20]:
-				yield str(round(float(fields[19]), 2)) + ", " + str(round(float(fields[20]), 2)), self.cdd[fields[5]]
+				yield str(round(float(fields[19]), 3)) + ", " + str(round(float(fields[20]), 3)), self.cdd[fields[5]]
 			#elif fields[13]:
 			#	yield "Community area " + fields[13], 1
 			#else:

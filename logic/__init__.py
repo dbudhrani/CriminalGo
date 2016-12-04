@@ -3,3 +3,4 @@ from PointInPolygon import PointInPolygon
 from PokemonPredictor import PokemonPredictor
 from PokemonPredictor2 import PokemonPredictor2
 from BuildClustersMap import BuildClustersMap
+from BuildPokemonAreas import BuildPokemonAreas
