@@ -67,7 +67,7 @@ class PokemonPredictor():
 					matrix.append(matrixRow)
 
 					pokemonId = row[0]
-					pokemonId_res.append(pokemonId)
+					pokemonId_res.append(self.prd[pokemonId])
 		
 		numRows = len(matrix)
 		numResults = len(pokemonId_res)
@@ -104,7 +104,7 @@ class PokemonPredictor():
 		accuracy = 0
 		while i < testRowsNumber:
 			self.addPokemonCluster(matrix[trainingRowsNumber+i][0], matrix[trainingRowsNumber+i][1], prediction[i], 2)
-			fw.write(str(pokemonId_res_check[i]) + ";" + str(matrix[trainingRowsNumber+i][0]) + ";" + str(matrix[trainingRowsNumber+i][1]) + "\n")
+			fw.write(str(pokemonId_res_check[i]) + ";" + str(prediction[i]) + ";" + str(matrix[trainingRowsNumber+i][0]) + ";" + str(matrix[trainingRowsNumber+i][1]) + "\n")
 			if pokemonId_res_check[i] == prediction[i]:
 				accuracy += 1
 			i += 1

@@ -11,11 +11,11 @@ class BuildClustersMap():
 		#	llcrnrlon=-87.9520771, llcrnrlat=41.6177356, urcrnrlon=-87.5266041, urcrnrlat=42.024254)
 
 		# Chicago greater area
-		#m = Basemap(projection='merc', lat_0=41.84, lon_0=-87.73, resolution='h', area_thresh=0.1,
-		#	llcrnrlon=-87.9520771, llcrnrlat=41.6177356, urcrnrlon=-87.48, urcrnrlat=42.05)
+		m = Basemap(projection='merc', lat_0=41.84, lon_0=-87.73, resolution='h', area_thresh=0.1,
+			llcrnrlon=-87.9520771, llcrnrlat=41.6177356, urcrnrlon=-87.48, urcrnrlat=42.05)
 
 		# World
-		m = Basemap(projection='robin', lat_0=0, lon_0=-130, resolution='l', area_thresh=1000)
+		#m = Basemap(projection='robin', lat_0=0, lon_0=-130, resolution='l', area_thresh=1000)
 
 		m.drawcoastlines()
 		m.drawcountries()
