@@ -4,52 +4,36 @@ import sys
 
 from mrjob.job import MRJob
 from mrjob.step import MRStep
-
-from PointInPolygon import PointInPolygon
 from traceback import print_exc
-
 import numpy as np
 
 class BuildCrimeAreas(MRJob):
 
-	data = []
-	dataLoaded = False
-
+	# MRJob steps
 	def steps(self):
 		return [
 			MRStep(mapper_init=self.mapper_init1, mapper=self.mapper1, reducer=self.reducer1)
 		]
 
 	def mapper_init1(self):
+		# We start constructing the crime index dictionary
 		self.buildCrimeDegreeDictionary()
-		self.pip = PointInPolygon()
-		#self.pip.checkInside()
-		self.commAreas = open(os.path.join(os.path.dirname(__file__), '../datasets/CommAreas.csv'), 'r')
-		self.commReader = csv.reader(self.commAreas, delimiter=',')
-		print "mapper_init - commAreas = " + str(self.commAreas)
-		print "mapper_init - commReader = " + str(self.commReader)
-		self.data = []
-		self.dataLoaded = False
 
 	def mapper1(self, _, line):
-#		self.commAreas = open(os.path.join(os.path.dirname(__file__), '../datasets/CommAreas.csv'))
-#		self.commReader = csv.reader(self.commAreas, delimiter=',')
-		#print "mapper - commAreas = " + str(self.commAreas)
-		#print "mapper - commReader = " + str(self.commReader)
+		# We iterate over the row fields
 		for fields in csv.reader([line]):
+			# We verify whether the latitude and longitude are set in the current row
 			if fields[19] and fields[20]:
+				# We yield the cluster as the key and the crime index as the value
 				yield str(round(float(fields[19]), 3)) + ", " + str(round(float(fields[20]), 3)), self.cdd[fields[5]]
-			#elif fields[13]:
-			#	yield "Community area " + fields[13], 1
-			#else:
-			#	yield -2, 1
 
 	def reducer1(self, key, values):
+		# We compute the average crime index
 		lst = list(values)
 		yield key, sum(lst)/float(len(lst))
-#		yield key, sum(values)
 
 	def buildCrimeDegreeDictionary(self):
+		# Definition of the crime indices
 		self.cdd = {}
 		self.cdd["ARSON"] = 32
 		self.cdd["ASSAULT"] = 95

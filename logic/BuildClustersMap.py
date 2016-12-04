@@ -5,6 +5,7 @@ from sets import Set
 
 class BuildClustersMap():
 
+	# We build the map of the crime clusters
 	def buildCrimeMap(self, crimeClusters):
 		# Chicago
 		#m = Basemap(projection='merc', lat_0=41.84, lon_0=-87.73, resolution='h', area_thresh=0.1,
@@ -17,14 +18,16 @@ class BuildClustersMap():
 		# World
 		#m = Basemap(projection='robin', lat_0=0, lon_0=-130, resolution='l', area_thresh=1000)
 
+		# Drawing options
 		m.drawcoastlines()
 		m.drawcountries()
 		m.fillcontinents(color='green')
 		m.drawmapboundary()
-
 		m.drawmeridians(np.arange(0, 360, 30))
 		m.drawparallels(np.arange(-90, 90, 30))
 
+		# We build a dictionary splitting by crime index
+		# We use the plotted color as the key
 		cid = {}
 		for k in crimeClusters.keys():
 			crimeIndex = crimeClusters.get(k)
@@ -69,6 +72,7 @@ class BuildClustersMap():
 			elif crimeIndex >= 95:
 				color = 'mo'
 
+			# We include the current crime in the dictionary
 			if not color in cid:
 				x = []
 				y = []
@@ -77,12 +81,15 @@ class BuildClustersMap():
 				cid.get(color)[0].append(float(k.split(',')[0]))
 				cid.get(color)[1].append(float(k.split(',')[1]))
 
+		# We include the dictionary points
 		for k in cid.keys():
 			x,y = m(cid[k][1], cid[k][0])
 			m.plot(x, y, k, markersize=5)
 
+		# The map is shown
 		plt.show()
 
+	# We build a map of the pokemon clusters
 	def buildPokemonMap(self, pokemonClusters):
 
 		# Chicago
@@ -96,14 +103,16 @@ class BuildClustersMap():
 		# World
 		m = Basemap(projection='robin', lat_0=0, lon_0=-130, resolution='l', area_thresh=1000)
 
+		# Drawing options
 		m.drawcoastlines()
 		m.drawcountries()
 		m.fillcontinents(color='green')
 		m.drawmapboundary()
-
 		m.drawmeridians(np.arange(0, 360, 30))
 		m.drawparallels(np.arange(-90, 90, 30))
 
+		# We build a dictionary splitting by pokemon rareness
+		# We use the plotted color as the key
 		prd = {}
 		for k in pokemonClusters.keys():
 			rareness = pokemonClusters.get(k)
@@ -128,6 +137,7 @@ class BuildClustersMap():
 			elif rareness >= 4.5:
 				color = 'mo'
 
+			# We include the current pokemon appearance in the dictionary
 			if not color in prd:
 				x = []
 				y = []
@@ -136,16 +146,10 @@ class BuildClustersMap():
 				prd.get(color)[0].append(float(k.split(',')[0]))
 				prd.get(color)[1].append(float(k.split(',')[1]))
 
+		# We include the dictionary points
 		for k in prd.keys():
 			x,y = m(prd[k][1], prd[k][0])
 			m.plot(x, y, k, markersize=5)
 
+		# The map is shown
 		plt.show()
-'''
-		for k in pokemonClusters.keys():
-			print "k = " + str(k)
-			lats.append(float(k.split(',')[0]))
-			lons.append(float(k.split(',')[1]))
-			rareness = Set()
-			rareness.update(pokemonClusters.get(k))
-'''
